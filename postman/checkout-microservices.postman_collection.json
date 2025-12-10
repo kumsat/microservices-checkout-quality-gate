@@ -1,0 +1,154 @@
+{
+  "info": {
+    "name": "Microservices Checkout - Smoke Tests",
+    "_postman_id": "microservices-checkout-collection",
+    "description": "Basic API smoke tests for the microservices checkout system.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Product Service - List Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{product_service_url}}/products",
+          "host": ["{{product_service_url}}"],
+          "path": ["products"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an array\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory Service - Get Stock for Laptop-X",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{inventory_service_url}}/inventory/Laptop-X",
+          "host": ["{{inventory_service_url}}"],
+          "path": ["inventory", "Laptop-X"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Stock field exists\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('stock');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment Service - Successful Charge",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"card_number\": \"4242-4242-4242-4242\",\n  \"amount\": 100.0\n}"
+        },
+        "url": {
+          "raw": "{{payment_service_url}}/payment/charge",
+          "host": ["{{payment_service_url}}"],
+          "path": ["payment", "charge"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Payment status is SUCCESS\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql('SUCCESS');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order Service - Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"postman-user\",\n  \"items\": {\"Laptop-X\": 1},\n  \"total\": 999.0\n}"
+        },
+        "url": {
+          "raw": "{{order_service_url}}/orders",
+          "host": ["{{order_service_url}}"],
+          "path": ["orders"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Order contains correct user and item\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.order.user_id).to.eql('postman-user');",
+              "    pm.expect(jsonData.order.items['Laptop-X']).to.eql(1);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
+

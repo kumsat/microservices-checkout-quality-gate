@@ -1,0 +1,17 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+env/
+
+# pytest cache
+.pytest_cache/
+
+# VSCode
+.vscode/
+
+# Docker logs
+*.log
+

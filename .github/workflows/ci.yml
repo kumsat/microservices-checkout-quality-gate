@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run PyTest BDD tests
+        run: |
+          source venv/bin/activate
+          pytest tests/steps -v
+
+      - name: Install Newman
+        run: |
+          npm install -g newman
+
+      - name: Run Newman API tests (mock, no Docker)
+        run: |
+          # Here you'd normally call the live microservices.
+          # For now, this is a placeholder - you can adapt it later.
+          echo "Skipping real Newman run (needs running services)."
+          newman --version
+

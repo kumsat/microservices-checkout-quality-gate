@@ -55,6 +55,22 @@ pipeline {
                 '''
             }
         }
+        
+	 stage('Run k6 Load Test') {
+            steps {
+                sh '''
+                    # Ensure Docker CLI is available
+                    export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+
+                    echo "[INFO] Running k6 smoke test against Docker services..."
+
+                    docker run --rm \
+                      --network microservices-checkout-quality-gate_default \
+                      -v "$PWD/load_tests":/scripts \
+                      grafana/k6 run /scripts/checkout-smoke.js
+                '''
+            }
+        }
 
         stage('Run Newman API Smoke Tests') {
             steps {

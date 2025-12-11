@@ -23,18 +23,18 @@ pipeline {
             }
         }
 
-	stage('Docker Compose Up') {
-    	   steps {
-               sh '''
-               # Ensure Docker CLI is available in Jenkins PATH
-               export PATH="/usr/local/bin:$PATH"
+        stage('Docker Compose Up') {
+            steps {
+                sh '''
+                    # Ensure Docker CLI is available in Jenkins PATH
+                    export PATH="/usr/local/bin:$PATH"
 
                     docker compose down || true
                     docker compose up -d
                     sleep 10
-                    '''
+                '''
             }
-          }
+        }
 
         stage('Run PyTest BDD Tests') {
             steps {
@@ -49,7 +49,7 @@ pipeline {
             steps {
                 sh '''
                     newman run postman/checkout-microservices.postman_collection.json \
-                        -e postman/test-environment.postman_environment.json
+                      -e postman/test-environment.postman_environment.json
                 '''
             }
         }
@@ -64,12 +64,13 @@ pipeline {
         }
     }
 
-   post {
-    always {
-        sh '''
-            export PATH="/usr/local/bin:$PATH"
-            docker compose down || true
-        '''
-      } 
+    post {
+        always {
+            sh '''
+                export PATH="/usr/local/bin:$PATH"
+                docker compose down || true
+            '''
+        }
     }
+}
 

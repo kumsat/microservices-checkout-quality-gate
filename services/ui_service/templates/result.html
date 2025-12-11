@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Checkout Result</title>
+</head>
+<body>
+  <h1>Checkout Result</h1>
+  <p id="message">{{ message }}</p>
+
+  {% if success %}
+    <p>Your order was processed successfully.</p>
+  {% else %}
+    <p>Something went wrong, please try again.</p>
+  {% endif %}
+
+  <a href="/">Back to shop</a>
+</body>
+</html>
+

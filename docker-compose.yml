@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   product-service:
     build: ./services/product_service
@@ -25,4 +23,15 @@ services:
     build: ./services/order_service
     ports:
       - "5005:5005"
+
+  ui-service:
+    build: ./services/ui_service
+    ports:
+      - "5006:5000"
+    depends_on:
+      - product-service
+      - inventory-service
+      - cart-service
+      - payment-service
+      - order-service
 

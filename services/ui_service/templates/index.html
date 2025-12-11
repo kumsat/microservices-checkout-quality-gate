@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Microservices Shop - UI</title>
+</head>
+<body>
+  <h1>Microservices Shop</h1>
+
+  <h2>Available Products</h2>
+  {% if products %}
+    <ul>
+      {% for p in products %}
+        <li id="product-{{ p.id }}">
+          {{ p.name }} – {{ p.price }} EUR (ID: {{ p.id }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No products available.</p>
+  {% endif %}
+
+  <h2>Simple Checkout</h2>
+  <form method="post" action="/checkout">
+    <label>User ID:
+      <input type="text" name="user_id" value="{{ default_user_id }}" id="user_id">
+    </label>
+    <br><br>
+
+    <label>Product ID:
+      <input type="text" name="product_id" value="Laptop-X" id="product_id">
+    </label>
+    <br><br>
+
+    <label>Quantity:
+      <input type="number" name="quantity" value="1" id="quantity">
+    </label>
+    <br><br>
+
+    <label>Card Number:
+      <input type="text" name="card_number" value="4242-4242-4242-4242" id="card_number">
+    </label>
+    <br><br>
+
+    <button type="submit" id="checkout-btn">Checkout</button>
+  </form>
+</body>
+</html>
+

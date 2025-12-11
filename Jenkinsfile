@@ -46,13 +46,16 @@ pipeline {
         }
 
         stage('Run Newman API Tests') {
-            steps {
-                sh '''
-                    newman run postman/checkout-microservices.postman_collection.json \
-                      -e postman/test-environment.postman_environment.json
-                '''
-            }
-        }
+    steps {
+        sh '''
+            # Ensure Newman (npm global) is in PATH
+            export PATH="/usr/local/bin:$PATH"
+
+            newman run postman/checkout-microservices.postman_collection.json \
+              -e postman/test-environment.postman_environment.json
+        '''
+    }
+}
 
         stage('Run Selenium UI Tests') {
             steps {

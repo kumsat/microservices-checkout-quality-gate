@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Just a helper var; we still call venv directly
         PY_VENV = "venv"
     }
 
@@ -32,7 +31,7 @@ pipeline {
         stage('Docker Compose Up') {
             steps {
                 sh '''
-                    # Ensure Docker CLI is in PATH for Jenkins
+                    # Ensure Docker CLI is in PATH for Jenkins (Mac / Homebrew locations)
                     export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
 
                     echo "[INFO] Bringing down any existing stack..."
@@ -55,11 +54,10 @@ pipeline {
                 '''
             }
         }
-        
-	 stage('Run k6 Load Test') {
+
+        stage('Run k6 Load Test') {
             steps {
                 sh '''
-                    # Ensure Docker CLI is available
                     export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
 
                     echo "[INFO] Running k6 smoke test against Docker services..."
@@ -71,7 +69,7 @@ pipeline {
                 '''
             }
         }
-	
+
         stage('OWASP ZAP Baseline Scan') {
             steps {
                 sh '''
@@ -94,10 +92,10 @@ pipeline {
             }
         }
 
-         stage('Run Newman API Smoke Tests') {
+        stage('Run Newman API Smoke Tests') {
             steps {
                 sh '''
-                    # Try to locate newman (global npm install)
+                    # Try to locate newman (installed globally via npm or brew)
                     export PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.npm-global/bin:$HOME/.npm-packages/bin:$PATH"
 
                     echo "[INFO] Using PATH: $PATH"
@@ -120,6 +118,30 @@ pipeline {
                 sh '''
                     . venv/bin/activate
                     pytest tests/selenium -v
+                '''
+            }
+        }
+
+        stage('Run Playwright UI Tests') {
+            steps {
+                sh '''
+                    # Ensure Node/npm are visible for Jenkins
+                    export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+
+                    cd ui-tests
+
+                    echo "[INFO] Installing Playwright dependencies..."
+                    if [ -f package-lock.json ]; then
+                      npm ci
+                    else
+                      npm install
+                    fi
+
+                    echo "[INFO] Installing Playwright browsers..."
+                    npx playwright install
+
+                    echo "[INFO] Running Playwright tests..."
+                    npx playwright test
                 '''
             }
         }

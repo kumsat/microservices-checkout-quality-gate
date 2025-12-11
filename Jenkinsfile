@@ -71,8 +71,30 @@ pipeline {
                 '''
             }
         }
+	
+        stage('OWASP ZAP Baseline Scan') {
+            steps {
+                sh '''
+                    export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
 
-        stage('Run Newman API Smoke Tests') {
+                    mkdir -p security/zap_reports
+
+                    echo "[INFO] Running OWASP ZAP baseline scan..."
+
+                    docker run --rm \
+                      --network microservices-checkout-quality-gate_default \
+                      -v "$PWD/security/zap_reports":/zap/wrk \
+                      owasp/zap2docker-stable zap-baseline.py \
+                        -t http://ui-service:5006 \
+                        -r zap-baseline-report.html \
+                        -x zap-baseline-report.xml \
+                        -J zap-baseline-report.json \
+                        -m 5
+                '''
+            }
+        }
+
+         stage('Run Newman API Smoke Tests') {
             steps {
                 sh '''
                     # Try to locate newman (global npm install)

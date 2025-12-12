@@ -96,7 +96,7 @@ The pipeline is implemented using Jenkins (Pipeline as Code) and validates quali
 
 GitHub automatically renders this diagram.
 
-
+```mermaid
 flowchart TD
     A[GitHub Push] --> B[Jenkins Checkout]
 
@@ -115,6 +115,7 @@ flowchart TD
     I --> J[Archive Reports]
     J --> K[Docker Cleanup]
     K --> L[Pipeline Completed]
+```
 
 📊 Test Reports & Artifacts
 

@@ -72,27 +72,27 @@ pipeline {
 
 	stage('OWASP ZAP Baseline Scan') {
 	    steps {
- 	       sh '''
-  	        # Make sure Docker CLI is on PATH (Mac/Homebrew)
-  	        export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
+	        sh '''
+	          # Ensure Docker CLI is available
+	          export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 	          mkdir -p security/zap_reports
-  	          echo '[INFO] Running OWASP ZAP baseline scan (non-blocking)...'
+	          echo '[INFO] Running OWASP ZAP baseline scan...'
 
-	          # Use the new official ZAP image from GitHub Container Registry
+	          # Updated official ZAP image from GitHub Container Registry
 	          docker run --rm \
 	            --network microservices-checkout-quality-gate_default \
 	            -v "$WORKSPACE/security/zap_reports:/zap/wrk" \
 	            ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
-	              -t http://ui-service:5006 \
-	              -r zap-baseline-report.html \
- 	              -x zap-baseline-report.xml \
-	              -J zap-baseline-report.json \
-	              -m 5 \
-	          || echo "[WARN] ZAP scan failed (image/network issue). Letting pipeline continue for now."
+  	            -t http://ui-service:5006 \
+                    -r zap-baseline-report.html \
+       	            -x zap-baseline-report.xml \
+                    -J zap-baseline-report.json \
+                    -m 5 \
+	          || echo "[WARN] ZAP scan failed. Pipeline will continue."
 	        '''
-	      }
-       	}
+	    }
+	}
 	
 
         stage('Run Newman API Smoke Tests') {

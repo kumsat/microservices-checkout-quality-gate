@@ -17,27 +17,47 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install Python dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      # Start the same Docker stack that Jenkins uses
+      - name: Start microservices with Docker Compose
+        run: |
+          docker compose -f docker-compose.yml up -d
+
+          echo "Waiting for services to be ready..."
+          # Wait for all backend services on 5001–5005
+          for port in 5001 5002 5003 5004 5005; do
+            for i in {1..15}; do
+              if nc -z localhost $port; then
+                echo "Port $port is up ✅"
+                break
+              fi
+              echo "Waiting for port $port (try $i/15)..."
+              sleep 3
+            done
+          done
 
       - name: Run PyTest BDD tests
         run: |
-          source venv/bin/activate
           pytest tests/steps -v
 
       - name: Install Newman
         run: |
           npm install -g newman
 
-      - name: Run Newman API tests (mock, no Docker)
+      - name: Run Newman API tests (against Docker services)
         run: |
-          # Here you'd normally call the live microservices.
-          # For now, this is a placeholder - you can adapt it later.
-          echo "Skipping real Newman run (needs running services)."
-          newman --version
+          newman run postman/checkout-microservices.postman_collection.json \
+            -e postman/test-environment.postman_environment.json
+
+      # Always tear down Docker, even if tests fail
+      - name: Tear down Docker stack
+        if: always()
+        run: |
+          docker compose -f docker-compose.yml down
 

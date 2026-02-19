@@ -2,27 +2,27 @@ This project demonstrates a real-world DevOps QA pipeline for validating a micro
 
 The pipeline is implemented using Jenkins (Pipeline as Code) and validates quality, performance, and security before any deployment.
 
-🧩 CI Pipeline Stages
+**CI Pipeline Stages**
 
-1️⃣ Source Checkout
+1️. Source Checkout
 
--Jenkins pulls the latest code from GitHub
+ Jenkins pulls the latest code from GitHub
 
--Pipeline defined in Jenkinsfile
+ Pipeline defined in Jenkinsfile
 
-2️⃣ Environment Setup
+2️. Environment Setup
 
--Python virtual environment created
+ Python virtual environment created
 
--Dependencies installed from requirements.txt
+ Dependencies installed from requirements.txt
 
--Fully reproducible CI environment
+ Fully reproducible CI environment
 
-3️⃣ Infrastructure Provisioning
+3️. Infrastructure Provisioning
 
--Microservices started using Docker Compose
+ Microservices started using Docker Compose
 
--Services:
+ Services:
 
 	-Product Service
 
@@ -36,11 +36,11 @@ The pipeline is implemented using Jenkins (Pipeline as Code) and validates quali
 
 	-UI Service
 
-4️⃣ Functional Quality Gate – API (BDD)
+4️. Functional Quality Gate – API (BDD)
 
--PyTest + pytest-bdd
+ PyTest + pytest-bdd
 
--End-to-end business flows validated:
+ End-to-end business flows validated:
 
     -Successful checkout
 
@@ -48,51 +48,51 @@ The pipeline is implemented using Jenkins (Pipeline as Code) and validates quali
 
     -Inventory consistency
 
--Results exported as JUnit XML
+ Results exported as JUnit XML
 
--Reports archived in Jenkins
+ Reports archived in Jenkins
 
-5️⃣ Performance Testing
+5️. Performance Testing
 
--k6 load testing
+ k6 load testing
 
--Executed inside Docker network
+ Executed inside Docker network
 
--Validates system behavior under load
+ Validates system behavior under load
 
--JSON metrics archived as artifacts
+ JSON metrics archived as artifacts
 
-6️⃣ Security Testing
+6️. Security Testing
 
--OWASP ZAP baseline scan
+ OWASP ZAP baseline scan
 
--Detects common vulnerabilities:
+ Detects common vulnerabilities:
 
     -Missing headers
 
     -Insecure configurations
 
--CI-safe (non-blocking)
+ CI-safe (non-blocking)
 
--Security reports archived
+ Security reports archived
 
-7️⃣ UI Testing (optional / extensible)
+7. UI Testing (optional / extensible)
 
--Selenium & Playwright supported
+ Selenium & Playwright supported
 
--Headless execution in CI
+ Headless execution in CI
 
--Designed for browser-based quality gates
+ Designed for browser-based quality gates
 
-8️⃣ CI Hygiene
+8️. CI Hygiene
 
--Test reports archived automatically
+ Test reports archived automatically
 
--Docker containers cleaned up after each run
+ Docker containers cleaned up after each run
 
 -Pipeline fails only on real quality violations
 
-🧠 CI/CD Pipeline Flow Diagram
+ 9. CI/CD Pipeline Flow Diagram
 
 GitHub automatically renders this diagram.
 
@@ -117,45 +117,45 @@ flowchart TD
     K --> L[Pipeline Completed]
 ```
 
-📊 Test Reports & Artifacts
+10. Test Reports & Artifacts
 
 Jenkins archives the following artifacts on each run:
 
-🧪 PyTest JUnit reports
+ PyTest JUnit reports
 
-⚡ k6 performance metrics
+ k6 performance metrics
 
-🔐 OWASP ZAP security reports
+ OWASP ZAP security reports
 
-These artifacts enable:
+ These artifacts enable:
 
--Traceability
+ Traceability
 
--Auditing
+ Auditing
 
--Quality gate enforcement
+ Quality gate enforcement
 
 
-🎯 Why this project matters
+**Why this project matters**
 
 This repository showcases:
 
-✔️ DevOps mindset
-✔️ CI/CD ownership
-✔️ Test automation at scale
-✔️ Microservices testing
-✔️ Performance & security awareness
+ DevOps mindset
+ CI/CD ownership
+ Test automation at scale
+ Microservices testing
+ Performance & security awareness
 
 
 
-✅ Next Enhancements (Planned)
+**Next Enhancements (Planned)**
 
--GitHub Actions CI (parallel to Jenkins)
+ GitHub Actions CI (parallel to Jenkins)
 
--Docker Hub image publishing
+ Docker Hub image publishing
 
--Kubernetes deployment (k3d / kind)
+ Kubernetes deployment (k3d / kind)
 
--Centralized observability (Grafana)
+ Centralized observability (Grafana)
 
--Quality Gate dashboard
+ Quality Gate dashboard
